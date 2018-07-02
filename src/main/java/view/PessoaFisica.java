@@ -3,7 +3,12 @@ package view;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
+import javax.persistence.TypedQuery;
+import javax.persistence.metamodel.ListAttribute;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -16,6 +21,7 @@ import javax.swing.text.MaskFormatter;
 
 import persistence.HibernateUtil;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import persistence.HibernateUtil;
 
@@ -219,6 +225,31 @@ public class PessoaFisica extends JFrame {
 
 		paine.add(btnImprimir);
 		btnImprimir.setBounds(390, 250, 130, 30);
+		btnImprimir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Session session = HibernateUtil.getSessionFactory().openSession();
+				//session.createQuery("from PessoaFisica").list()
+				
+				/*TypedQuery<model.PessoaFisica> query = session.createQuery("from PessoaFisica", model.PessoaFisica.class);
+				ArrayList<model.PessoaFisica> resultList = query.getResultList();				
+				System.out.print(query);	*/
+				
+				Query qry = session.createQuery("from PessoaFisica");
+			    List l = qry.list();
+			    System.out.println("Total Number Of Records : "+l.size());
+			    Iterator<model.PessoaFisica> it = l.iterator();
+			    while(it.hasNext())
+			    {
+			        Object o = (Object)it.next();
+			        model.PessoaFisica p = (model.PessoaFisica)o;
+			        System.out.println("ID: "+p.getId());
+			        System.out.println("CPF: "+p.getCpf());
+			        System.out.println("Nome: "+p.getNome());
+			        System.out.println("Bairro: "+p.getBairro());
+			        System.out.println("----------------------");
+			    }    
+			}
+		});
 
 		this.setLayout(null);
 		this.setVisible(true);
