@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 
 import javax.persistence.TypedQuery;
 import javax.persistence.metamodel.ListAttribute;
@@ -228,26 +229,26 @@ public class PessoaFisica extends JFrame {
 		btnImprimir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Session session = HibernateUtil.getSessionFactory().openSession();
-				//session.createQuery("from PessoaFisica").list()
+				//session.createQuery("from PessoaFisica").list();
 				
 				/*TypedQuery<model.PessoaFisica> query = session.createQuery("from PessoaFisica", model.PessoaFisica.class);
 				ArrayList<model.PessoaFisica> resultList = query.getResultList();				
-				System.out.print(query);	*/
+				System.out.print(query);*/
 				
 				Query qry = session.createQuery("from PessoaFisica");
 			    List l = qry.list();
 			    System.out.println("Total Number Of Records : "+l.size());
-			    Iterator<model.PessoaFisica> it = l.iterator();
-			    while(it.hasNext())
-			    {
+			    Iterator<model.PessoaFisica> it = l.iterator();	
+			    ArrayList<model.PessoaFisica> pessoas = new ArrayList<model.PessoaFisica>();
+			    for(;it.hasNext();) {
 			        Object o = (Object)it.next();
 			        model.PessoaFisica p = (model.PessoaFisica)o;
-			        System.out.println("ID: "+p.getId());
-			        System.out.println("CPF: "+p.getCpf());
-			        System.out.println("Nome: "+p.getNome());
-			        System.out.println("Bairro: "+p.getBairro());
-			        System.out.println("----------------------");
-			    }    
+			    	pessoas.add(p);
+			    }
+				
+				String [] colunas = {"id", "bairro", "celular", "CEP", "cidade", "cpf" ,"endereço", "estado", "nome", "rg", "sexo", "telefone"}; 			    
+				ListarContatos tabela = new ListarContatos();
+				tabela.criaJanela(pessoas, colunas);
 			}
 		});
 
